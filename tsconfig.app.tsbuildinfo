@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/router.tsx","./src/vite-env.d.ts","./src/components/moviecard.tsx","./src/lib/config.ts","./src/pages/authpage.tsx","./src/pages/homepage.tsx","./src/pages/moviedetailspage.tsx","./src/pages/notfoundpage.tsx","./src/pages/watchlistpage.tsx","./src/services/tmdb.ts","./src/types/movie.ts"],"version":"5.9.3"}
