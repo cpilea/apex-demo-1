@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { readScopedStorage, removeScopedStorage, writeScopedStorage } from "../lib/localStorage";
 import type { AuthFormValues, SessionUser, StoredUser } from "../types/auth";
-import { AuthContext, type AuthContextValue } from "./auth-context";
+import { AuthContext, type AuthContextValue } from "./AuthContext";
 
 const USERS_KEY = "users";
 const SESSION_KEY = "session";
