@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { AppErrorBoundary } from "./components/AppErrorBoundary";
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/useAuth";
 
 export function App() {
   const { user, signOut } = useAuth();

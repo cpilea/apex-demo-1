@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { MovieCard } from "../components/MovieCard";
 import { EmptyState, ErrorState, LoadingState } from "../components/PageStatus";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/useAuth";
 import { getWatchlist } from "../services/watchlist";
 
 export function WatchlistPage() {

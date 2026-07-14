@@ -1,19 +1,10 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { readScopedStorage, removeScopedStorage, writeScopedStorage } from "../lib/localStorage";
 import type { AuthFormValues, SessionUser, StoredUser } from "../types/auth";
+import { AuthContext, type AuthContextValue } from "./auth-context";
 
 const USERS_KEY = "users";
 const SESSION_KEY = "session";
-
-type AuthContextValue = {
-  user: SessionUser | null;
-  isReady: boolean;
-  signIn: (values: AuthFormValues) => Promise<void>;
-  signUp: (values: AuthFormValues) => Promise<void>;
-  signOut: () => void;
-};
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
@@ -50,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsReady(true);
   }, []);
 
-  const signIn = async ({ email, password }: AuthFormValues) => {
+  const signIn = useCallback(async ({ email, password }: AuthFormValues) => {
     const normalizedEmail = normalizeEmail(email);
     const nextPasswordHash = await hashPassword(password);
     const users = readUsers();
@@ -78,9 +69,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const sessionUser = toSessionUser(existingUser);
     writeScopedStorage(SESSION_KEY, sessionUser);
     setUser(sessionUser);
-  };
+  }, []);
 
-  const signUp = async ({ name, email, password }: AuthFormValues) => {
+  const signUp = useCallback(async ({ name, email, password }: AuthFormValues) => {
     const trimmedName = name?.trim();
     const normalizedEmail = normalizeEmail(email);
 
@@ -95,7 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const newUser: StoredUser = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      id: crypto.randomUUID(),
       name: trimmedName,
       email: normalizedEmail,
       password: await hashPassword(password),
@@ -107,12 +98,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const sessionUser = toSessionUser(newUser);
     writeScopedStorage(SESSION_KEY, sessionUser);
     setUser(sessionUser);
-  };
+  }, []);
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     removeScopedStorage(SESSION_KEY);
     setUser(null);
-  };
+  }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -122,18 +113,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signUp,
       signOut,
     }),
-    [isReady, user]
+    [isReady, signIn, signOut, signUp, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider.");
-  }
-
-  return context;
 }

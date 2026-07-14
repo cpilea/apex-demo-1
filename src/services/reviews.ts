@@ -31,7 +31,7 @@ export async function saveMovieReview(review: ReviewDraft) {
   const timestamp = new Date().toISOString();
 
   const nextReview: MovieReview = {
-    id: `${review.movieId}-${review.userId}`,
+    id: `${review.movieId}:${review.userId}`,
     movieId: review.movieId,
     userId: review.userId,
     userName: review.userName,

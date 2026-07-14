@@ -27,7 +27,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true, allowExportNames: ["useAuth"] },
+        { allowConstantExport: true },
       ],
       "no-undef": "off",
       "no-unused-vars": "off",
