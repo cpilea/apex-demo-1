@@ -10,6 +10,10 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
+function isPasswordHash(value: string) {
+  return /^[a-f0-9]{64}$/i.test(value);
+}
+
 async function hashPassword(password: string) {
   const encodedPassword = new TextEncoder().encode(password);
   const digest = await crypto.subtle.digest("SHA-256", encodedPassword);
@@ -37,8 +41,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    setUser(readScopedStorage<SessionUser | null>(SESSION_KEY, null));
-    setIsReady(true);
+    const initializeAuth = async () => {
+      const users = readUsers();
+      const migratedUsers = await Promise.all(
+        users.map(async (candidate) =>
+          isPasswordHash(candidate.password)
+            ? candidate
+            : { ...candidate, password: await hashPassword(candidate.password) }
+        )
+      );
+
+      if (migratedUsers.some((candidate, index) => candidate.password !== users[index].password)) {
+        writeUsers(migratedUsers);
+      }
+
+      setUser(readScopedStorage<SessionUser | null>(SESSION_KEY, null));
+      setIsReady(true);
+    };
+
+    void initializeAuth();
   }, []);
 
   const signIn = useCallback(async ({ email, password }: AuthFormValues) => {
@@ -48,11 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const existingUser = users.find(
       (candidate) => normalizeEmail(candidate.email) === normalizedEmail
     );
-
-    const passwordMatches = Boolean(
-      existingUser &&
-        (existingUser.password === nextPasswordHash || existingUser.password === password)
-    );
+    const passwordMatches = Boolean(existingUser && existingUser.password === nextPasswordHash);
 
     if (!existingUser || !passwordMatches) {
       throw new Error("We couldn't match that email and password.");

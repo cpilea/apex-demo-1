@@ -197,10 +197,7 @@ button:focus-visible {
 
 /* ── Home header ──────────────────────────────────────────── */
 
-.home-header {
-  margin-bottom: 1.25rem;
-}
-
+.home-header,
 .section-copy {
   margin-bottom: 1.25rem;
 }

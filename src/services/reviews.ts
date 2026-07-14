@@ -21,7 +21,7 @@ function readReviewStore() {
 export async function getMovieReviews(movieId: number) {
   const reviews = readReviewStore()[String(movieId)] ?? [];
 
-  return [...reviews].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+  return reviews.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
 }
 
 export async function saveMovieReview(review: ReviewDraft) {
