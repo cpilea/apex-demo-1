@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { WatchlistButton } from "./WatchlistButton";
 import { buildPosterUrl } from "../services/tmdb";
 import type { MovieSummary } from "../types/movie";
 
@@ -37,6 +38,9 @@ export function MovieCard({ movie }: MovieCardProps) {
           <p className="movie-card-year">{year}</p>
         </div>
       </Link>
+      <div className="movie-card-actions">
+        <WatchlistButton movie={movie} className="watchlist-btn watchlist-btn-card" />
+      </div>
     </article>
   );
 }

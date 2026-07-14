@@ -14,4 +14,10 @@ export const config = {
   tmdbImageBaseUrl:
     (import.meta.env.VITE_TMDB_IMAGE_BASE_URL as string | undefined) ??
     "https://image.tmdb.org/t/p/w500",
+  appStorageNamespace:
+    (import.meta.env.VITE_APP_STORAGE_NAMESPACE as string | undefined) ??
+    "movie-database-app",
+  authProviderLabel:
+    (import.meta.env.VITE_AUTH_PROVIDER_LABEL as string | undefined) ??
+    "Custom local demo auth",
 };
