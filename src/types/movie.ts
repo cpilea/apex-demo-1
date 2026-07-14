@@ -36,3 +36,15 @@ export type MovieCredits = {
   id: number;
   cast: CastMember[];
 };
+
+export type MovieReview = {
+  id: string;
+  movieId: number;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  rating: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+};

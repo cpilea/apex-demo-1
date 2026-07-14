@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 type StatusProps = {
   title: string;
   message: string;
-  action?: React.ReactNode;
+  action?: ReactNode;
 };
 
 export function ErrorState({ title, message, action }: StatusProps) {

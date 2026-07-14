@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
+import { ReviewSection } from "../components/ReviewSection";
+import { WatchlistButton } from "../components/WatchlistButton";
 import {
   buildAvatarUrl,
   buildBackdropUrl,
@@ -9,6 +11,7 @@ import {
 } from "../services/tmdb";
 import { DetailsSkeleton } from "../components/DetailsSkeleton";
 import { EmptyState, ErrorState } from "../components/PageStatus";
+import type { MovieSummary } from "../types/movie";
 
 function StarRating({ value }: { value: number }) {
   const pct = (value / 10) * 100;
@@ -68,6 +71,13 @@ export function MovieDetailsPage() {
   const runtime = movie.runtime
     ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
     : null;
+  const watchlistMovie: MovieSummary = {
+    id: movie.id,
+    title: movie.title,
+    poster_path: movie.poster_path,
+    release_date: movie.release_date,
+    vote_average: movie.vote_average,
+  };
 
   return (
     <div className="details-page">
@@ -120,6 +130,13 @@ export function MovieDetailsPage() {
             </div>
 
             <p className="details-overview">{movie.overview || "No overview available."}</p>
+            <div className="details-actions">
+              <WatchlistButton
+                movie={watchlistMovie}
+                className="watchlist-btn watchlist-btn-hero"
+                redirectTo={`/movie/${movie.id}`}
+              />
+            </div>
           </div>
         </div>
 
@@ -154,6 +171,8 @@ export function MovieDetailsPage() {
             message="This movie does not currently have cast data available."
           />
         )}
+
+        <ReviewSection movieId={movie.id} movieTitle={movie.title} />
       </div>
     </div>
   );
