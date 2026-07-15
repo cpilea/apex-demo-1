@@ -6,5 +6,5 @@ The token below is a **fake, invalid, revoked** GitHub PAT used purely for demo/
 It has never been a valid credential and cannot be used to authenticate.
 
 ```
-DEMO_GITHUB_TOKEN=ghp_Demo1FakeTokenForSecretScanningTest12345
+DEMO_GITHUB_TOKEN=ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789
 ```
